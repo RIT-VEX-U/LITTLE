@@ -48,7 +48,8 @@ void pre_auton()
 
 task autonomous()
 {
-
+	startTask(topPIDTask);
+	startTask(bottomPIDTask);
 }
 
 task usercontrol()
