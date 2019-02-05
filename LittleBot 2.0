@@ -1,0 +1,94 @@
+#include "robot-config.h"
+
+void turnLeft(double deg){
+    
+}
+
+void turnRight(double deg){
+    
+}
+
+void driveTo(double rot){
+    if(rot > 0){
+        while(rot - driveRight.rotation(vex::rotationUnits::rev) > 0 && rot - driveLeft.rotation(vex::rotationUnits::rev) > 0){
+            driveLeft.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+            driveRight.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+        }
+    }
+    else{
+        while(driveRight.rotation(vex::rotationUnits::rev) - rot > 0 && driveLeft.rotation(vex::rotationUnits::rev) - rot > 0){
+            driveLeft.spin(vex::directionType::rev, 127, vex::velocityUnits::rpm);
+            driveRight.spin(vex::directionType::rev, 127, vex::velocityUnits::rpm);
+        }
+    }
+    driveRight.stop();
+    driveLeft.stop();
+}
+/**
+void lineUpShot(){
+    while(Vision.largestObject.originX != 0){
+        if(Vision.largestObject.originX < 0){
+            turnRight(5); //should probably be a changing value
+        }
+        else if(Vision.largestObject.originX > 0){
+            turnLeft(5);
+        }
+    }
+    while(Vision.largestObject.originY != 0){
+        if(Vision.largestObject.originY < 0){
+            driveLeft.spin(vex::directionType::fwd, 60, vex::velocityUnits::rpm);
+            driveRight.spin(vex::directionType::fwd, 60, vex::velocityUnits::rpm);
+            //time
+            driveLeft.stop();
+            driveRight.stop();
+        }
+        else if(Vision.largestObject.originY > 0){
+            driveLeft.spin(vex::directionType::rev, 60, vex::velocityUnits::rpm);
+            driveRight.spin(vex::directionType::rev, 60, vex::velocityUnits::rpm);
+            //time
+            driveLeft.stop();
+            driveRight.stop();
+        }
+    }
+}
+
+void launch(){
+    double currTime = Brain.timer(vex::timeUnits::sec);
+    lineUpShot();
+    while((Brain.timer(vex::timeUnits::sec) - currTime) < 5){
+        launcherLeft.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+        launcherRight.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+    }
+}
+*/
+void autonomous(){
+    
+}
+
+void usercontrol(){
+    while(true){
+        driveLeft.spin(vex::directionType::fwd, Controller.Axis3.value(),vex::velocityUnits::rpm);
+        driveRight.spin(vex::directionType::fwd, Controller.Axis2.value(),vex::velocityUnits::rpm);
+        if(Controller.ButtonR1.pressing()){
+            launcherLeft.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+            launcherRight.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+        }
+        else{
+            launcherLeft.stop();
+            launcherRight.stop();
+        }
+        if(Controller.ButtonR2.pressing()){
+            roller1.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+            roller2.spin(vex::directionType::fwd, 127, vex::velocityUnits::rpm);
+        }
+        else{
+            roller1.stop();
+            roller2.stop();
+        }
+    }
+}
+
+int main() {
+    Competition.autonomous(autonomous);
+    Competition.drivercontrol(usercontrol);
+}
