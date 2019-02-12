@@ -35,35 +35,6 @@ backRightMotor.move(right_out * 127);
 //================== END DRIVING CODE ===================
 
 //====================OPERATING CODE=====================
-void moveLift(float speed)
-{
-	upperLeftLiftMotor.move(speed);
-	upperRightLiftMotor.move(speed);
-	lowerLeftLiftMotor.move(speed);
-	lowerRightLiftMotor.move(speed);
-}
-
-float lift_up_speed = 127;
-float lift_down_speed = 80;
-float empty_hold_voltage = 10;
-float full_hold_voltage = 30;
-
-void moveLift(bool button_up, bool button_down)
-{
-	if(button_up)
-	{
-		moveLift(lift_up_speed);
-	}else if(button_down)
-	{
-		moveLift(-lift_down_speed);
-	}else if(upperLeftLiftMotor.get_position() > 50)
-	{
-		moveLift(empty_hold_voltage);
-	}else
-	{
-		moveLift(0);
-	}
-}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -90,8 +61,6 @@ void opcontrol()
 		//End Driving Control
 
 		//Operating Controls
-
-		moveLift(controller1.get_digital(E_CONTROLLER_DIGITAL_L1), controller1.get_digital(E_CONTROLLER_DIGITAL_R1));
 
 		//End Operating Controls
 
