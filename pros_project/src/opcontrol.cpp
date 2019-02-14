@@ -1,37 +1,12 @@
 #include "main.h"
+#include "external_functions.h"
 #include "hardware.h"
 
 using namespace pros;
 
 
 //==================== DRIVING CODE ====================
-/**
- *	Drives the robot using a tank-system.
- *
- *	Squaring the inputs allows slower control over the majority of the
- *	joystick band, but still allows fast movements near the end, following
- 		a x^2 curve. Leave as false for a y=x linear function.
- */
-void drive(float left, float right, bool square_inputs)
-{
 
-float left_out = left / 127.0;
-float right_out = right / 127.0;
-
-int left_sign = (left_out > 0) ? 1 : (left_out < 0) ? -1 : 0;
-int right_sign = (right_out > 0) ? 1 : (right_out < 0) ? -1 : 0;
-
-if(square_inputs)
-{
-	left_out = pow(left_out, 2) * left_sign;
-	right_out = pow(right_out, 2) * right_sign;
-}
-
-frontLeftMotor.move(left_out * 127);
-backLeftMotor.move(left_out * 127);
-frontRightMotor.move(right_out * 127);
-backRightMotor.move(right_out * 127);
-}
 //================== END DRIVING CODE ===================
 
 //====================OPERATING CODE=====================
@@ -56,7 +31,9 @@ void opcontrol()
 	while(true)
 	{
 		//Driving Control
-		drive(controller1.get_analog(E_CONTROLLER_ANALOG_LEFT_Y), controller1.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y), true);
+		driveMecanum(Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_LEFT_Y),
+		 Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_LEFT_X),
+		 Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_RIGHT_X), false, 0.1);
 
 		//End Driving Control
 
