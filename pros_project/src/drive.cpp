@@ -50,11 +50,9 @@ void driveMecanum(int leftYJoy, int leftXJoy, int rightXJoy, bool squareInputs, 
 	float leftXIn = leftXJoy / 127.0;
 	float rightXIn = rightXJoy / 127.0;
 
-	float magnitude = sqrt(pow(leftYIn, 2) + pow(leftXIn, 2));
-	float direction = atan(leftXIn / leftYIn);
+	float magnitude = sqrt(pow((float)leftYIn, 2) + pow((float)leftXIn, 2));
+	float direction = atan2(leftXIn, leftYIn);
 	float rotation = rightXIn;
-
-	direction = (direction * 180) / (3.14159);
 
 	driveMecanumRaw(magnitude, direction, rotation, squareInputs,deadband);
 }
@@ -66,13 +64,12 @@ void driveMecanum(int leftYJoy, int leftXJoy, int rightXJoy, bool squareInputs, 
 */
 void driveMecanumRaw(float magnitude, float direction, float rotation, bool squareInputs, float deadband)
 {
-	direction = (direction * 3.14159) / (180.0);
 	//The wheels on the corner of the robot use the same formula, besides rotation.
 	//Rotation is dertermined by whether the wheel is on the left or right side.
 	float frontLeftOut = (magnitude * cos(direction - (3.14159 / 4.0))) + rotation;
 	float backRightOut = (magnitude * cos(direction - (3.14159 / 4.0))) - rotation;
-	float frontRightOut = (magnitude * cos(direction + (3.14159 / 4.0))) + rotation;
-	float backLeftOut = (magnitude * cos(direction + (3.14159 / 4.0))) - rotation;
+	float frontRightOut = (magnitude * cos(direction + (3.14159 / 4.0))) - rotation;
+	float backLeftOut = (magnitude * cos(direction + (3.14159 / 4.0))) + rotation;
 	//Limit the output between -1 and 1
 	frontLeftOut = (frontLeftOut > 1) ? 1 : (frontLeftOut < -1) ? -1 : frontLeftOut;
 	frontRightOut = (frontRightOut > 1) ? 1 : (frontRightOut < -1) ? -1 : frontRightOut;
@@ -85,14 +82,9 @@ void driveMecanumRaw(float magnitude, float direction, float rotation, bool squa
 		rotation = (rotation > 0 ? 1 : -1) * pow(rotation, 2);
 	}
 
-	if(abs(magnitude) > abs(deadband))
-	{
 		Hardware::frontLeftMotor.move(frontLeftOut * 127);
 		Hardware::frontRightMotor.move(frontRightOut * 127);
 		Hardware::backLeftMotor.move(backLeftOut * 127);
 		Hardware::backRightMotor.move(backRightOut * 127);
-	}else
-	{
-		drive(0,0);
-	}
+
 }
