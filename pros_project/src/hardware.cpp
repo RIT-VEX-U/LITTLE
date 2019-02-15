@@ -1,17 +1,17 @@
+#include "api.h"
 #include "hardware.h"
 
 using namespace pros;
 
-Motor frontLeftMotor = Motor(12, false);
-Motor backLeftMotor = Motor(11, false);
-Motor frontRightMotor = Motor(14, true);
-Motor backRightMotor = Motor(13, true);
+Motor Hardware::frontLeftMotor = Motor(12, false);
+Motor Hardware::backLeftMotor = Motor(11, false);
+Motor Hardware::frontRightMotor = Motor(14, true);
+Motor Hardware::backRightMotor = Motor(13, true);
 
-Motor upperLeftLiftMotor = Motor(2, true);
-Motor lowerLeftLiftMotor = Motor(1, true);
-Motor upperRightLiftMotor = Motor(4, false);
-Motor lowerRightLiftMotor = Motor(3, false);
+Motor Hardware::leftFlywheelMotor = Motor(2, false);
+Motor Hardware::rightFlywheelMotor = Motor(1, true);
+Motor Hardware::intakeMotor = Motor(3, false);
 
-Controller controller1 = Controller(E_CONTROLLER_MASTER);
+Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
-ADIGyro gyro = ADIGyro(1, .1);
+ADIGyro Hardware::gyro = ADIGyro(1, .1);

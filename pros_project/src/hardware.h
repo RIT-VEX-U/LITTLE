@@ -12,10 +12,9 @@ public:
   static Motor frontRightMotor;
   static Motor backRightMotor;
 
-  static Motor frontLeftFlywheelMotor;
-  static Motor backLeftFlywheelMotor;
-  static Motor frontRightFlywheelMotor;
-  static Motor backRightFlywheelMotor;
+  static Motor leftFlywheelMotor;
+  static Motor rightFlywheelMotor;
+  static Motor intakeMotor;
 
   static ADIGyro gyro;
 
