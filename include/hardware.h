@@ -7,10 +7,8 @@ using namespace pros;
 class Hardware
 {
 public:
-  static Motor frontLeftMotor;
-  static Motor backLeftMotor;
-  static Motor frontRightMotor;
-  static Motor backRightMotor;
+  static Motor leftMotor;
+  static Motor rightMotor;
 
   static Motor leftFlywheelMotor;
   static Motor rightFlywheelMotor;
@@ -19,5 +17,7 @@ public:
   static ADIGyro gyro;
 
   static Controller controller1;
+
+  static Vision vision;
 };
 #endif

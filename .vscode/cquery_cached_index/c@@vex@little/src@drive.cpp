@@ -4,9 +4,7 @@
 void drive(int leftMotor, int rightMotor)
 {
 	Hardware::frontLeftMotor.move(leftMotor);
-	Hardware::backLeftMotor.move(leftMotor);
 	Hardware::frontRightMotor.move(rightMotor);
-	Hardware::backRightMotor.move(rightMotor);
 }
 
 /**

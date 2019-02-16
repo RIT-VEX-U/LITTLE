@@ -13,14 +13,26 @@ enum AutoPath
 
 AutoPath currentPosition = init;
 
+// resets chassis encoders (all?)
+void resetEncoders(){
+  Hardware::leftMotor.set_zero_position(Hardware::leftMotor.get_position());
+  Hardware::rightMotor.set_zero_position(Hardware::rightMotor.get_position());
+}
+
+// position robot so it's ready to shoot
+void lineUp(){
+  
+}
+
 // Drive to distance given
 void driveDist(int inch){
-  while(Hardware::frontLeftMotor.get_position()*SPROCKET_ROTATION < inch){
+  while(Hardware::leftMotor.get_position()*SPROCKET_ROTATION < inch){
     drive(100, 100); //lowered speed for more accuracy
   }
   drive(-20, -20); //quick brake if needed
   delay(500);
   drive(0, 0);
+  resetEncoders();
 }
 
 /**
