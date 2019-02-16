@@ -1,11 +1,12 @@
 #include "main.h"
 #include "hardware.h"
-#include "drive.h"
 #include "ballshooter.h"
+#include "drive.h"
+#include "PIDController.h"
+
 
 
 using namespace pros;
-
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -22,8 +23,8 @@ using namespace pros;
  */
 void opcontrol()
 {
-
-
+  float setVelocity = 0;
+  PIDController flywheelPID = PIDController(1,0,0,20,&Hardware::leftFlywheelMotor);
 	while(true)
 	{
 		//Driving Control
@@ -32,11 +33,7 @@ void opcontrol()
 		//End Driving Control
 
 		//Operating Controls
-    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_R1)){
-        spinUpFlywheel(12000);
-    }else{
-      spinUpFlywheel(0);
-    }
+
 
     if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_L1)){
       Hardware::flipperMotor.move_voltage(6000);
@@ -45,8 +42,20 @@ void opcontrol()
     }else{
       Hardware::flipperMotor.move_voltage(0);
     }
+
+    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){
+      setVelocity += 100;
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+      setVelocity -= 100;
+    }
+
+
 		//End Operating Controls
+    flywheelPID.setTarget(setVelocity);
+    float pidOut = flywheelPID.step();
+    Hardware::leftFlywheelMotor.move_voltage(pidOut);
+    Hardware::rightFlywheelMotor.move_voltage(pidOut);
 
-
+    delay(20);
 	}
 }

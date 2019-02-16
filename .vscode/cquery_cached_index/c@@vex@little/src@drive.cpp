@@ -1,5 +1,7 @@
-#include "external_functions.h"
 #include "hardware.h"
+#include "drive.h"
+
+bool turnInit = true;
 
 void drive(int leftMotor, int rightMotor)
 {
@@ -30,6 +32,31 @@ if(square_inputs)
 }
 
 drive((int)(left_out * 127), (int)(right_out * 127));
+}
+
+//turn to specified degrees at specified speed, has to be in while loop when used
+bool turn(float degrees, float speed)
+{
+  if(turnInit)
+	{
+		Hardware::gyro.reset();
+		turnInit = false;
+	}
+
+	if(fabs(Hardware::gyro.get_value()) > fabs(degrees))
+	{
+		drive(0,0);
+		turnInit = true;
+		return true;
+	}
+
+	speed = fabs(127 * speed);
+	if(degrees > 0)
+		drive(speed, -speed);
+	else if(degrees < 0)
+		drive(-speed, speed);
+
+	return false;
 }
 
 /**
