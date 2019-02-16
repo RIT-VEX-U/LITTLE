@@ -1,6 +1,6 @@
 #include "main.h"
 #include "hardware.h"
-#include "external_functions.h"
+#include "drive.h"
 #define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
 
 enum AutoPath

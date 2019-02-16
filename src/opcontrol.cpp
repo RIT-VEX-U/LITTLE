@@ -8,16 +8,6 @@
 
 using namespace pros;
 
-// Drive to distance given
-void driveDist(int inch){
-  while(Hardware::frontLeftMotor.get_position()*SPROCKET_ROTATION < inch){
-    drive(100, 100); //lowered speed for more accuracy
-  }
-  drive(-20, -20); //quick brake if needed
-  delay(500);
-  drive(0, 0);
-}
-
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -43,11 +33,7 @@ void opcontrol()
 		//End Driving Control
 
 		//Operating Controls
-    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_R1)){
-        spinUpFlywheel(12000);
-    }else{
-      spinUpFlywheel(0);
-    }
+
 
     if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_L1)){
       Hardware::flipperMotor.move_voltage(6000);

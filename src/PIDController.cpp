@@ -10,7 +10,6 @@ PIDController::PIDController(float pGain, float iGain, float dGain, float deltaT
   victim = victim;
   lastError = 0;
   cumError = 0;
-
 }
 
 float PIDController::step(){
@@ -23,7 +22,7 @@ float PIDController::step(){
     cumError = 400;
   }
 
-  return map(pGain * error + iGain * cumError + dError * dGain);
+  return PIDController::map(pGain * error + iGain * cumError + dError * dGain);
 }
 
 void PIDController::setTarget(float targetVelocity){
@@ -33,8 +32,6 @@ void PIDController::setTarget(float targetVelocity){
 float map(float value){
   float leftSpan = 800;
   float rightSpan = 24000;
-
-
   float valueScaled = value / leftSpan;
 
   return -12000 + (valueScaled * rightSpan);

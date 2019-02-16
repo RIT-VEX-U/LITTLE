@@ -6,7 +6,7 @@ class PIDController{
                   pros::Motor *victim);
     float step();
     void setTarget(float targetVelocity);
-    float map(float value);
+    static float map(float value);
 
   private:
     float pGain;
