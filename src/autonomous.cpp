@@ -1,4 +1,7 @@
 #include "main.h"
+#include "hardware.h"
+#include "external_functions.h"
+#define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
 
 enum AutoPath
 {
@@ -9,6 +12,16 @@ enum AutoPath
 
 
 AutoPath currentPosition = init;
+
+// Drive to distance given
+void driveDist(int inch){
+  while(Hardware::frontLeftMotor.get_position()*SPROCKET_ROTATION < inch){
+    drive(100, 100); //lowered speed for more accuracy
+  }
+  drive(-20, -20); //quick brake if needed
+  delay(500);
+  drive(0, 0);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
