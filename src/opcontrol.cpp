@@ -2,6 +2,7 @@
 #include "hardware.h"
 #include "ballshooter.h"
 #include "drive.h"
+#include "PIDController.h"
 
 
 
@@ -32,8 +33,8 @@ void driveDist(int inch){
  */
 void opcontrol()
 {
-
-
+  float setVelocity = 0;
+  PIDController flywheelPID = PIDController(1,0,0,20,&Hardware::leftFlywheelMotor);
 	while(true)
 	{
 		//Driving Control
@@ -55,8 +56,20 @@ void opcontrol()
     }else{
       Hardware::flipperMotor.move_voltage(0);
     }
+
+    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){
+      setVelocity += 100;
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+      setVelocity -= 100;
+    }
+
+
 		//End Operating Controls
+    flywheelPID.setTarget(setVelocity);
+    float pidOut = flywheelPID.step();
+    Hardware::leftFlywheelMotor.move_voltage(pidOut);
+    Hardware::rightFlywheelMotor.move_voltage(pidOut);
 
-
+    delay(20);
 	}
 }
