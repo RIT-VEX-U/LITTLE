@@ -21,7 +21,7 @@ void resetEncoders(){
 
 // position robot so it's ready to shoot
 void lineUp(){
-  
+
 }
 
 // Drive to distance given

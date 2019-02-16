@@ -3,10 +3,8 @@
 
 void drive(int leftMotor, int rightMotor)
 {
-	Hardware::frontLeftMotor.move(leftMotor);
-	Hardware::backLeftMotor.move(leftMotor);
-	Hardware::frontRightMotor.move(rightMotor);
-	Hardware::backRightMotor.move(rightMotor);
+	Hardware::leftMotor.move(leftMotor);
+	Hardware::rightMotor.move(rightMotor);
 }
 
 /**
@@ -82,9 +80,7 @@ void driveMecanumRaw(float magnitude, float direction, float rotation, bool squa
 		rotation = (rotation > 0 ? 1 : -1) * pow(rotation, 2);
 	}
 
-		Hardware::frontLeftMotor.move(frontLeftOut * 127);
-		Hardware::frontRightMotor.move(frontRightOut * 127);
-		Hardware::backLeftMotor.move(backLeftOut * 127);
-		Hardware::backRightMotor.move(backRightOut * 127);
+		Hardware::leftMotor.move(frontLeftOut * 127);
+		Hardware::rightMotor.move(frontRightOut * 127);
 
 }
