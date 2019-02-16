@@ -1,6 +1,7 @@
 #include "main.h"
-#include "external_functions.h"
 #include "hardware.h"
+#include "ballshooter.h"
+#include "drive.h"
 
 using namespace pros;
 
@@ -31,7 +32,19 @@ void opcontrol()
 		//End Driving Control
 
 		//Operating Controls
+    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_R1)){
+        spinUpFlywheel(12000);
+    }else{
+      spinUpFlywheel(0);
+    }
 
+    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_L1)){
+      Hardware::flipperMotor.move_voltage(6000);
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_L2)){
+      Hardware::flipperMotor.move_voltage(-6000);
+    }else{
+      Hardware::flipperMotor.move_voltage(0);
+    }
 		//End Operating Controls
 
 

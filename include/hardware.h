@@ -16,6 +16,8 @@ public:
   static Motor rightFlywheelMotor;
   static Motor intakeMotor;
 
+  static Motor flipperMotor;
+  
   static ADIGyro gyro;
 
   static Controller controller1;
