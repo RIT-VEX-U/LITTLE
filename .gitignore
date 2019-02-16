@@ -1,2 +1,4 @@
-bin/*
-.vscode/*
+bin/
+.vscode/
+compile_commands.json
+firmware/
