@@ -14,4 +14,4 @@ Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
 ADIGyro Hardware::gyro = ADIGyro(1, .1);
 
-Vision Hardware::vision = Vision(5); 
+Vision Hardware::vis = Vision(5);

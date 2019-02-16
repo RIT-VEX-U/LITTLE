@@ -18,6 +18,6 @@ public:
 
   static Controller controller1;
 
-  static Vision vision;
+  static Vision vis;
 };
 #endif

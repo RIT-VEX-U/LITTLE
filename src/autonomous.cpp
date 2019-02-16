@@ -3,6 +3,10 @@
 #include "external_functions.h"
 #define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
 
+vision_signature_s_t RED_SIG = Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
+Hardware::vis.set_signature(1, &RED_SIG);
+
+
 enum AutoPath
 {
   init, turnToOurFlag1, fireMid1, driveToPushFlag, reverseFromPushFlag,
