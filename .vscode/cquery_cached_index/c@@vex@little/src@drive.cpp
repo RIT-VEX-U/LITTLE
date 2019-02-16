@@ -1,4 +1,3 @@
-#include "external_functions.h"
 #include "hardware.h"
 
 void drive(int leftMotor, int rightMotor)

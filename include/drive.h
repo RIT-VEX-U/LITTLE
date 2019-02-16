@@ -1,3 +1,5 @@
+#define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
+
 //Driving Code
 void drive(int leftMotor, int rightMotor);
 void driveTank(float left, float right, bool square_inputs);
