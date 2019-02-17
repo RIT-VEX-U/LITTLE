@@ -17,24 +17,10 @@ float PIDController::step(){
   dError = (error - lastError) / (deltaT / 1000);
   lastError = error;
   cumError += error;
-  if(cumError > 20000){
-    cumError = 20000;
-  }else if(cumError < -20000){
-    cumError = 20000;
-  }
 
-  return map((pGain * error) + (iGain * cumError));
+  return (pGain * error) + (iGain * cumError);
 }
 
 void PIDController::setTarget(float targetVelocity){
   target = targetVelocity;
-}
-
-
-float PIDController::map(float value){
-  float leftSpan = 7000;
-  float rightSpan = 24000;
-  float valueScaled = value / leftSpan;
-
-  return -12000 + (valueScaled * rightSpan);
 }

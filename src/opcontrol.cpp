@@ -10,7 +10,10 @@ void opcontrol()
 {
   float setVelocity = 0;
   float pidOut = 0;
-  PIDController flywheelPID = PIDController(1,1,1,20,Hardware::leftFlywheelMotor);
+  PIDController flywheelPID = PIDController(1,.05,0,20,Hardware::leftFlywheelMotor);
+  flywheelPID.cumError = 0;
+  long lastTime = millis();
+  bool stopPID = false;
 	while(true)
 	{
 		//Driving Control
@@ -26,28 +29,49 @@ void opcontrol()
       Hardware::flipperMotor.move_voltage(0);
     }
 
-    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){
-      setVelocity += 100;
-      if(setVelocity > 7000)
-        setVelocity = 7000;
-    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-      setVelocity -= 100;
-      if(setVelocity < 0){
-        setVelocity = 0;
-      }
+    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_R2)){
+      Hardware::intakeMotor.move_voltage(-12000);
+    }else{
+      Hardware::intakeMotor.move_voltage(0);
     }
+
+    if(millis() - lastTime > 100){
+      if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){
+        setVelocity += 100;
+        if(setVelocity > 7000)
+          setVelocity = 7000;
+      }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+        setVelocity -= 100;
+        if(setVelocity < 0){
+          setVelocity = 0;
+        }
+      }
+
+      if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A)){
+        stopPID = !stopPID;
+      }
+      lastTime = millis();
+    }
+
+
+
 
     /*
     if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_R1)){
-        spinUpFlywheel(12000);
+        spinUpFlywheel(7500);
     }else{
       spinUpFlywheel(0);
     }
     */
 
+
 		//End Operating Controls
     flywheelPID.setTarget(setVelocity);
     pidOut = flywheelPID.step();
+    if(stopPID){
+      pidOut = 0;
+    }
+
     Hardware::leftFlywheelMotor.move_voltage(pidOut);
     Hardware::rightFlywheelMotor.move_voltage(pidOut);
 
@@ -56,7 +80,7 @@ void opcontrol()
     lcd::print(2, "Target RPM: %f", flywheelPID.target);
     lcd::print(3,"cumError: %f", flywheelPID.cumError);
     lcd::print(4, "PID Out: %f, Error: %f", pidOut, flywheelPID.error);
-    lcd::print(5, "Controller Speed Read: %f", flywheelPID.victim->get_actual_velocity());
+    lcd::print(5, "Controller Speed Read: %f", flywheelPID.victim->get_actual_velocity() * 35);
     lcd::print(6, "pComp: %f, iComp: %f, dComp: %f",
     flywheelPID.pGain * flywheelPID.error,
     flywheelPID.iGain * flywheelPID.cumError,

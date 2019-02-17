@@ -3,8 +3,8 @@
 
 using namespace pros;
 
-Motor Hardware::leftMotor = Motor(10, true);
-Motor Hardware::rightMotor = Motor(1, false);
+Motor Hardware::leftMotor = Motor(1, false);
+Motor Hardware::rightMotor = Motor(10, true);
 
 Motor Hardware::leftFlywheelMotor = Motor(9, true);
 Motor Hardware::rightFlywheelMotor = Motor(2, false);
