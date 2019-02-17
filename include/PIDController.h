@@ -1,3 +1,5 @@
+#ifndef PID_H
+#define PID_H
 #include "main.h"
 class PIDController{
 
@@ -5,6 +7,7 @@ class PIDController{
     PIDController(float pGain, float iGain, float dGain, float deltaT,
                   pros::Motor victim);
     float step();
+    float pidOut;
     void setTarget(float targetVelocity);
     static float map(float value);
 
@@ -21,3 +24,4 @@ class PIDController{
 
 
 };
+#endif

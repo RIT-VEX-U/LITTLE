@@ -9,6 +9,7 @@ PIDController::PIDController(float p, float i, float d, float deltaT, pros::Moto
   victim = &motor;
   lastError = 0;
   cumError = 0;
+  pidOut = 0;
 }
 
 float PIDController::step(){
