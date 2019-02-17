@@ -19,14 +19,8 @@ bool intakeBall(int direction)
   return false;
 }
 
-float PIDCalc(float targetVelocity){
-  float flywheelVelocity = (Hardware::leftFlywheelMotor.get_actual_velocity() + Hardware::rightFlywheelMotor.get_actual_velocity()) / 2;
-  float error = flywheelVelocity - targetVelocity;
-
-  //float integral = iGain
-}
-
 void spinUpFlywheel(int voltage){
-  Hardware::leftFlywheelMotor.move_voltage(-voltage);
-  Hardware::rightFlywheelMotor.move_voltage(-voltage);
+  Hardware::leftFlywheelMotor.move_voltage(voltage);
+  Hardware::rightFlywheelMotor.move_voltage(voltage);
+  return;
 }

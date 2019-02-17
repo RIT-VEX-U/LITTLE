@@ -3,12 +3,11 @@ class PIDController{
 
   public:
     PIDController(float pGain, float iGain, float dGain, float deltaT,
-                  pros::Motor *victim);
+                  pros::Motor victim);
     float step();
     void setTarget(float targetVelocity);
     static float map(float value);
 
-  private:
     float pGain;
     float iGain;
     float dGain;
@@ -17,7 +16,7 @@ class PIDController{
     float lastError;
     float dError;
     float deltaT;
-    float targetVelocity;
+    float target;
     pros::Motor *victim;
 
 

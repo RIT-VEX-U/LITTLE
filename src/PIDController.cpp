@@ -1,36 +1,38 @@
 #include "PIDController.h"
 
-PIDController::PIDController(float pGain, float iGain, float dGain, float deltaT,
-                            pros::Motor *victim)
+PIDController::PIDController(float p, float i, float d, float deltaT, pros::Motor motor)
 {
-  pGain = pGain;
-  iGain = iGain;
-  dGain = dGain;
+  pGain = p;
+  iGain = i;
+  dGain = d;
   deltaT = deltaT;
-  victim = victim;
+  victim = &motor;
   lastError = 0;
   cumError = 0;
 }
 
 float PIDController::step(){
   float velocity = victim->get_actual_velocity() * 35;
-  error = targetVelocity - velocity;
+  error = target - velocity;
   dError = (error - lastError) / (deltaT / 1000);
   lastError = error;
   cumError += error;
-  if(cumError > 400){
-    cumError = 400;
+  if(cumError > 20000){
+    cumError = 20000;
+  }else if(cumError < -20000){
+    cumError = 20000;
   }
 
-  return PIDController::map(pGain * error + iGain * cumError + dError * dGain);
+  return map((pGain * error) + (iGain * cumError));
 }
 
 void PIDController::setTarget(float targetVelocity){
-  targetVelocity = targetVelocity;
+  target = targetVelocity;
 }
 
-float map(float value){
-  float leftSpan = 800;
+
+float PIDController::map(float value){
+  float leftSpan = 7000;
   float rightSpan = 24000;
   float valueScaled = value / leftSpan;
 

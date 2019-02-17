@@ -8,8 +8,8 @@ Motor Hardware::backLeftMotor = Motor(8, false);
 Motor Hardware::frontRightMotor = Motor(3, true);
 Motor Hardware::backRightMotor = Motor(5, true);
 
-Motor Hardware::leftFlywheelMotor = Motor(9, false);
-Motor Hardware::rightFlywheelMotor = Motor(2, true);
+Motor Hardware::leftFlywheelMotor = Motor(9, true);
+Motor Hardware::rightFlywheelMotor = Motor(2, false);
 Motor Hardware::intakeMotor = Motor(3, false);
 Motor Hardware::flipperMotor = Motor(4,false);
 
