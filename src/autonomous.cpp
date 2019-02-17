@@ -3,6 +3,10 @@
 #include "drive.h"
 #define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
 
+//values need to be changed
+vision_signature_s_t RED_SIG = Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
+//vision_signature_s_t BLUE_SIG = Vision::signature_from_utility(2,...);
+
 enum AutoPath
 {
   init, turnToOurFlag1, fireMid1, driveToPushFlag, reverseFromPushFlag,
@@ -13,14 +17,36 @@ enum AutoPath
 
 AutoPath currentPosition = init;
 
+// set vision vision signatures
+void setSig(){
+  Hardware::vis.set_signature(1, &RED_SIG);
+  //Hardware::vis.set_signature(1, &BLUE_SIG);
+}
+
+
+
+// resets chassis encoders (all?)
+void resetEncoders(){
+  Hardware::leftMotor.set_zero_position(Hardware::leftMotor.get_position());
+  Hardware::rightMotor.set_zero_position(Hardware::rightMotor.get_position());
+}
+
+// position robot so it's ready to shoot (vision sensor needed)
+void lineUp(){
+
+}
+
+//
+
 // Drive to distance given
 void driveDist(int inch){
-  while(Hardware::frontLeftMotor.get_position()*SPROCKET_ROTATION < inch){
+  while(Hardware::leftMotor.get_position()*SPROCKET_ROTATION < inch){
     drive(100, 100); //lowered speed for more accuracy
   }
   drive(-20, -20); //quick brake if needed
   delay(500);
   drive(0, 0);
+  resetEncoders();
 }
 
 /**
@@ -38,7 +64,7 @@ void autonomous() {
   switch(currentPosition)
   {
     case init:
-
+      setSig();
     break;
     case turnToOurFlag1:
 
