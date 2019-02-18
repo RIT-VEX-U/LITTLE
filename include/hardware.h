@@ -2,26 +2,25 @@
 #define HARDWARE
 #include "api.h"
 #include "PIDController.h"
-using namespace pros;
 
 class Hardware
 {
 public:
-  static Motor leftMotor;
-  static Motor rightMotor;
+  static pros::Motor leftMotor;
+  static pros::Motor rightMotor;
 
-  static Motor leftFlywheelMotor;
-  static Motor rightFlywheelMotor;
-  static Motor intakeMotor;
+  static pros::Motor leftFlywheelMotor;
+  static pros::Motor rightFlywheelMotor;
+  static pros::Motor intakeMotor;
 
   static PIDController flywheelPID;
 
-  static Motor flipperMotor;
+  static pros::Motor flipperMotor;
 
-  static ADIGyro gyro;
+  static pros::ADIGyro gyro;
 
-  static Controller controller1;
+  static pros::Controller controller1;
 
-  static Vision camera;
+  static pros::Vision camera;
 };
 #endif

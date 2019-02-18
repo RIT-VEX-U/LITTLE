@@ -19,7 +19,7 @@ AutoPath currentPosition = init;
 
 // set vision vision signatures
 void setSig(){
-  Hardware::vis.set_signature(1, &RED_SIG);
+  Hardware::camera.set_signature(1, &RED_SIG);
   //Hardware::vis.set_signature(1, &BLUE_SIG);
 }
 

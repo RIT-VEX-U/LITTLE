@@ -1,4 +1,6 @@
 #include "PIDController.h"
+#include "api.h"
+#include "pros/rtos.h"
 
 PIDController::PIDController(float p, float i, float d, float deltaT, pros::Motor motor)
 {
@@ -10,6 +12,15 @@ PIDController::PIDController(float p, float i, float d, float deltaT, pros::Moto
   lastError = 0;
   cumError = 0;
   pidOut = 0;
+
+}
+
+void PIDController::initTask(){
+  task_handle = pros::c::task_create((pros::task_fn_t)task_function,
+    (void*)this,
+     TASK_PRIORITY_DEFAULT,
+      TASK_STACK_DEPTH_DEFAULT,
+       task_name);
 }
 
 float PIDController::step(){
@@ -24,4 +35,12 @@ float PIDController::step(){
 
 void PIDController::setTarget(float targetVelocity){
   target = targetVelocity;
+}
+
+void task_function(void* param){
+  ((PIDController*)param)->cumError = 0;
+
+  while(true){
+
+  }
 }

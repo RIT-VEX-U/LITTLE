@@ -1,6 +1,7 @@
 #include "ballshooter.h"
 #include "hardware.h"
 #include "PIDController.h"
+#include "main.h"
 bool fireBall(bool spinUpButton, bool fireButton, float distanceToFlag, float selected_flag_height)
 {
   return false;

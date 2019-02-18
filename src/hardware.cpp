@@ -11,7 +11,7 @@ Motor Hardware::rightFlywheelMotor = Motor(2, false);
 Motor Hardware::intakeMotor = Motor(3, false);
 Motor Hardware::flipperMotor = Motor(4,false);
 
-PIDController flywheelPID = PIDController(1,.05,0,20,Hardware::leftFlywheelMotor);
+PIDController Hardware::flywheelPID = PIDController(1,.05,0,20,Hardware::leftFlywheelMotor);
 
 Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
