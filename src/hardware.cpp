@@ -13,10 +13,10 @@ Motor Hardware::intakeMotor = Motor(3, false);
 Motor Hardware::flipperMotor = Motor(4,false);
 
 
-PIDController Hardware::flywheelPID = PIDController(1,.05,0,20,{&Hardware::leftFlywheelMotor, &Hardware::rightFlywheelMotor});
+PIDController Hardware::flywheelPID = PIDController(.3,.1,0,20,{&Hardware::leftFlywheelMotor, &Hardware::rightFlywheelMotor});
 
 Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
 ADIGyro Hardware::gyro = ADIGyro(1, .1);
 
-Vision Hardware::camera = Vision(5);
+//Vision Hardware::camera = Vision(5);

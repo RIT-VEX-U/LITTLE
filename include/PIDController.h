@@ -22,7 +22,7 @@ class PIDController{
     float dError;
     float deltaT;
     float target;
-    pros::task_t task_handle;
+    pros::Task* task_handle;
     std::vector<pros::Motor *> victims;
 
 
