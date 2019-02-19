@@ -22,8 +22,8 @@ void initialize() {
 
 	pros::lcd::register_btn1_cb(on_center_button);
 
-
-
+	//pros::vision_signature sig = pros::Vision::signature_from_utility(1, -3817, -3307, -3562, 12179, 13435, 12807, 8.8, 0);//BLUE
+	//pros::Vision::signature_from_utility(2, 8595, 8905, 8750, -717, -353, -535, 8.8, 0);//RED
 }
 
 /**

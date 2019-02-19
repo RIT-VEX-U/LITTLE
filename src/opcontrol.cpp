@@ -8,10 +8,6 @@ using namespace pros;
 
 void opcontrol()
 {
-  float setVelocity = 0;
-  float pidOut = 0;
-  Hardware::flywheelPID.cumError = 0;
-  long lastTime = millis();
 
 	while(true)
 	{
@@ -35,34 +31,15 @@ void opcontrol()
     }
 
 
-    if(millis() - lastTime > 100){
-      if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP))
-      {
-        setVelocity += 100;
-        if(setVelocity > 7000)
-          setVelocity = 7000;
-      }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-        setVelocity -= 100;
-        if(setVelocity < 0)
-          setVelocity = 0;
-      }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A))
-        setVelocity = 0;
-
-      setFlywheelSpeed(setVelocity);
-      lastTime = millis();
+    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){
+      Hardware::flywheelPID.setTarget(4000);
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
+      Hardware::flywheelPID.setTarget(3000);
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
+      Hardware::flywheelPID.setTarget(2000);
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+      Hardware::flywheelPID.setTarget(0);
     }
-
-
-
-
-    /*
-    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_R1)){
-        spinUpFlywheel(7500);
-    }else{
-      spinUpFlywheel(0);
-    }
-    */
-
 
 		//End Operating Controls
 
@@ -72,7 +49,7 @@ void opcontrol()
     lcd::print(2, "Target RPM: %f", Hardware::flywheelPID.target);
     lcd::print(3,"cumError: %f", Hardware::flywheelPID.cumError);
     lcd::print(4, "PID Out: %f, Error: %f", Hardware::flywheelPID.pidOut, Hardware::flywheelPID.error);
-    lcd::print(5, "Controller Speed Read: %f", Hardware::flywheelPID.victim->get_actual_velocity() * 35);
+    lcd::print(5, "Controller Speed Read: %f", Hardware::flywheelPID.victims[0]->get_actual_velocity() * 35);
     lcd::print(6, "pComp: %f, iComp: %f, dComp: %f",
     Hardware::flywheelPID.pGain * Hardware::flywheelPID.error,
     Hardware::flywheelPID.iGain * Hardware::flywheelPID.cumError,
