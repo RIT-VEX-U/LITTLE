@@ -1,36 +1,38 @@
 #include "PIDController.h"
-#include "api.h"
+#include "main.h"
 #include "pros/rtos.h"
 
-PIDController::PIDController(float p, float i, float d, float deltaT, pros::Motor motor)
+PIDController::PIDController(float p, float i, float d, float deltaT, std::vector<pros::Motor *> victimList)
 {
   pGain = p;
   iGain = i;
   dGain = d;
   deltaT = deltaT;
-  victim = &motor;
+  victims = victimList;
   lastError = 0;
   cumError = 0;
   pidOut = 0;
 
-}
-
-void PIDController::initTask(){
   task_handle = pros::c::task_create((pros::task_fn_t)task_function,
     (void*)this,
      TASK_PRIORITY_DEFAULT,
       TASK_STACK_DEPTH_DEFAULT,
        task_name);
+  pros::c::task_resume(task_handle);
 }
 
 float PIDController::step(){
-  float velocity = victim->get_actual_velocity() * 35;
-  error = target - velocity;
-  dError = (error - lastError) / (deltaT / 1000);
-  lastError = error;
-  cumError += error;
+  float velocity = victims[0]->get_actual_velocity() * 35;
+  if(target == 0){
+    return 0;
+  }else{
+    error = target - velocity;
+    dError = (error - lastError) / (deltaT / 1000);
+    lastError = error;
+    cumError += error;
 
-  return (pGain * error) + (iGain * cumError);
+    return (pGain * error) + (iGain * cumError);
+  }
 }
 
 void PIDController::setTarget(float targetVelocity){
@@ -38,9 +40,15 @@ void PIDController::setTarget(float targetVelocity){
 }
 
 void task_function(void* param){
-  ((PIDController*)param)->cumError = 0;
-
+  PIDController *controller = ((PIDController*)param);
+  controller->cumError = 0;
+  controller->pidOut = 0;
+  float stepVal;
   while(true){
-
+      stepVal = controller->step();
+      for(pros::Motor *m : controller->victims){
+        m->move_voltage(stepVal);
+      }
   }
+  pros::delay(controller->deltaT);
 }

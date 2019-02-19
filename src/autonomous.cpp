@@ -4,7 +4,7 @@
 #define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
 
 //values need to be changed
-vision_signature_s_t RED_SIG = Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
+pros::vision_signature_s_t RED_SIG = pros::Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
 //vision_signature_s_t BLUE_SIG = Vision::signature_from_utility(2,...);
 
 enum AutoPath
@@ -44,7 +44,7 @@ void driveDist(int inch){
     drive(100, 100); //lowered speed for more accuracy
   }
   drive(-20, -20); //quick brake if needed
-  delay(500);
+  pros::delay(500);
   drive(0, 0);
   resetEncoders();
 }

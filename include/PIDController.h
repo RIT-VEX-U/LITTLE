@@ -1,16 +1,17 @@
 #ifndef PID_H
 #define PID_H
+#include <vector>
 #include "main.h"
+
 class PIDController{
 
   public:
     PIDController(float pGain, float iGain, float dGain, float deltaT,
-                  pros::Motor victim);
+                  std::vector<pros::Motor *> victimList);
     float step();
     float pidOut;
     void initTask();
     void setTarget(float targetVelocity);
-    static float map(float value);
     const char* task_name;
     float pGain;
     float iGain;
@@ -21,10 +22,9 @@ class PIDController{
     float dError;
     float deltaT;
     float target;
-    pros::Motor *victim;
     pros::task_t task_handle;
+    std::vector<pros::Motor *> victims;
 
-    static void task_function(PIDController *controller);
 
 
 };
