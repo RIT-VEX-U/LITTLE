@@ -8,10 +8,6 @@ using namespace pros;
 
 void opcontrol()
 {
-  float setVelocity = 0;
-  float pidOut = 0;
-  //Hardware::flywheelPID.cumError = 0;
-  long lastTime = millis();
 
 	while(true)
 	{
@@ -44,6 +40,8 @@ void opcontrol()
       Hardware::flywheelPID.setTarget(3000);
     }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
       Hardware::flywheelPID.setTarget(2000);
+    }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+      Hardware::flywheelPID.setTarget(0);
     }
     */
 

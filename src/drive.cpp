@@ -59,6 +59,16 @@ bool turn(float degrees, float speed)
 	return false;
 }
 
+//turn to unspecified degrees at specified speed, has to be in while loop when used
+void turnNoDeg(bool right, float speed){
+	if(right){
+		drive(speed, -speed);
+	}
+	else{
+		drive(-speed, speed);
+	}
+}
+
 /**
 * Drives the robot with a mecanum drivesystem, and with joystick inputs, between
 * -127 and +127.

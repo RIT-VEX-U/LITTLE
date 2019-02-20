@@ -21,6 +21,6 @@ public:
 
   static pros::Controller controller1;
 
-  static pros::Vision camera;
+  //static pros::Vision camera;
 };
 #endif

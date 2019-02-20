@@ -4,7 +4,7 @@
 #define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
 
 //values need to be changed
-pros::vision_signature_s_t RED_SIG = pros::Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
+//pros::vision_signature_s_t RED_SIG = pros::Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
 //vision_signature_s_t BLUE_SIG = Vision::signature_from_utility(2,...);
 
 enum AutoPath
@@ -19,7 +19,7 @@ AutoPath currentPosition = init;
 
 // set vision vision signatures
 void setSig(){
-  Hardware::camera.set_signature(1, &RED_SIG);
+  //Hardware::camera.set_signature(1, &RED_SIG);
   //Hardware::vis.set_signature(1, &BLUE_SIG);
 }
 

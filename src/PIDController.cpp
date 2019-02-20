@@ -13,12 +13,8 @@ PIDController::PIDController(float p, float i, float d, float deltaT, std::vecto
   cumError = 0;
   pidOut = 0;
 
-  task_handle = pros::c::task_create((pros::task_fn_t)task_function,
-    (void*)this,
-     TASK_PRIORITY_DEFAULT,
-      TASK_STACK_DEPTH_DEFAULT,
-       task_name);
-  pros::c::task_resume(task_handle);
+  task_handle = new pros::Task(task_function, (void*)this);
+  task_handle->resume();
 }
 
 float PIDController::step(){
