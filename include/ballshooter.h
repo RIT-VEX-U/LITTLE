@@ -1,9 +1,5 @@
-#ifndef BALLSHOOTER_H
-#define BALLSHOOTER_H
-#define LOW_FLAG_HEIGHT
-#define MID_FLAG_HEIGHT
-#define HIGH_FLAG_HEIGHT
-
+#ifndef BALLSHOOTER
+#define BALLSHOOTER
 enum Color
 {
   blue, red
@@ -14,4 +10,6 @@ bool fireBall(bool spinUpButton, bool fireButton, float distanceToFlag, float se
 bool setFlywheelSpeed(int rpm);
 bool intakeBall(int direction);
 bool autoAim(Color color);
+float getDistanceToTarget(int area);
+bool spinFlywheelToDistance(float inches, bool isHighFlag);
 #endif

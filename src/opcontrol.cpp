@@ -12,7 +12,8 @@ void opcontrol()
 	while(true)
 	{
 		//Driving Control
-		driveTank(Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_LEFT_Y), Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y), false);
+    if(!Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A))
+		  driveTank(Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_LEFT_Y), Hardware::controller1.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y), false);
 		//End Driving Control
 
 		//Operating Controls

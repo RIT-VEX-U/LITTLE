@@ -19,4 +19,4 @@ Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
 ADIGyro Hardware::gyro = ADIGyro(1, .1);
 
-//Vision Hardware::camera = Vision(5);
+Vision Hardware::camera = Vision(5);

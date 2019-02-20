@@ -1,4 +1,5 @@
 #include "main.h"
+#include "hardware.h"
 
 void on_center_button() {
 	static bool pressed = false;
@@ -10,6 +11,9 @@ void on_center_button() {
 	}
 }
 
+pros::vision_signature blue_signature = pros::Vision::signature_from_utility(1, -3817, -3307, -3562, 12179, 13435, 12807, 8.8, 0);//BLUE
+pros::vision_signature red_signature = pros::Vision::signature_from_utility(2, 8595, 8905, 8750, -717, -353, -535, 8.8, 0);//RED
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -19,6 +23,9 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
+
+	Hardware::camera.set_signature(1, &blue_signature);
+	Hardware::camera.set_signature(2, &red_signature);
 
 	pros::lcd::register_btn1_cb(on_center_button);
 
