@@ -36,7 +36,7 @@ void opcontrol()
 
 
     if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){
-      Hardware::flywheelPID.setTarget(4000);
+      Hardware::flywheelPID.setTarget(7000);
     }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
       Hardware::flywheelPID.setTarget(3000);
     }else if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
@@ -47,7 +47,7 @@ void opcontrol()
 
 
 		//End Operating Controls
-    
+
 
 
     delay(20);
