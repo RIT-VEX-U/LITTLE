@@ -1,16 +1,6 @@
 #include "main.h"
 #include "hardware.h"
 
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
 pros::vision_signature blue_signature = pros::Vision::signature_from_utility(1, -3817, -3307, -3562, 12179, 13435, 12807, 8.8, 0);//BLUE
 pros::vision_signature red_signature = pros::Vision::signature_from_utility(2, 8595, 8905, 8750, -717, -353, -535, 8.8, 0);//RED
 
@@ -22,12 +12,10 @@ pros::vision_signature red_signature = pros::Vision::signature_from_utility(2, 8
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
 
 	Hardware::camera.set_signature(1, &blue_signature);
 	Hardware::camera.set_signature(2, &red_signature);
 
-	pros::lcd::register_btn1_cb(on_center_button);
 
 }
 

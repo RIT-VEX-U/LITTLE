@@ -6,7 +6,7 @@
 class PIDController{
 
   public:
-    PIDController(float pGain, float iGain, float dGain, float deltaT,
+    PIDController(float pGain, float iGain, float dGain, float deltaTime,
                   std::vector<pros::Motor *> victimList);
     float step();
     float pidOut;
