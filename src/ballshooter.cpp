@@ -73,7 +73,7 @@ bool autoAim(Color color)
   out = Hardware::camera.get_by_sig(0, 2);
   }
 
-  lcd::print(0, "x out: %i", out.x_middle_coord);
+  //lcd::print(0, "x out: %i", out.x_middle_coord);
 
   if(out.x_middle_coord > 170)
     drive(AUTO_AIM_SPEED * 127, -AUTO_AIM_SPEED * 127);
