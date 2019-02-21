@@ -6,15 +6,15 @@
 #include "pros/vision.h"
 
 #define AUTO_AIM_SPEED .5
-#define FLYWHEEL_ANGLE 60
+#define FLYWHEEL_ANGLE 60.0
 #define FLYWHEEL_DIAMETER 4.0
 #define LOW_FLAG_HEIGHT 18.3
 #define MID_FLAG_HEIGHT 32.4
 #define HIGH_FLAG_HEIGHT 46.3
 #define FLYWHEEL_HEIGHT_FROM_GROUND 4.0
 
-#define CLOSE_SHOT_CUTOFF_Y 100
-#define FAR_SHOT_CUTOFF_Y 75
+#define CLOSE_SHOT_CUTOFF_Y 30
+#define FAR_SHOT_CUTOFF_Y 40
 
 #define FLYWHEEL_INRANGE_RPM 100
 
@@ -28,7 +28,7 @@ bool fireBall(Color color, bool closeShot, bool farShot, bool isInAuto)
       bool isHighFlag = false;
       if((closeShot && out.y_middle_coord > CLOSE_SHOT_CUTOFF_Y) || (farShot && out.y_middle_coord > FAR_SHOT_CUTOFF_Y))
         isHighFlag = true;
-      if(spinFlywheelToDistance(getDistanceToTarget(out.width * out.height), isHighFlag))
+      if(spinFlywheelToDistance(getDistanceToTarget(out.width * out.height, isHighFlag), isHighFlag))
       {
         if(isInAuto)
           Hardware::intakeMotor.move_relative(1000, 127);
@@ -42,10 +42,6 @@ bool fireBall(Color color, bool closeShot, bool farShot, bool isInAuto)
 bool setFlywheelSpeed(int rpm)
 {
   Hardware::flywheelPID.setTarget(rpm);
-  Hardware::flywheelPID.pidOut = Hardware::flywheelPID.step();
-
-  Hardware::leftFlywheelMotor.move_voltage(Hardware::flywheelPID.pidOut);
-  Hardware::rightFlywheelMotor.move_voltage(Hardware::flywheelPID.pidOut);
 
   if(Hardware::flywheelPID.error < FLYWHEEL_INRANGE_RPM)
     return true;
@@ -92,12 +88,11 @@ bool autoAim(Color color)
  return false;
 }
 
-#define SIZE_DISTANCE_SCALAR 1500.0//todo set me
-//size to distance relationship is inverse linear.
+#define ANGLE_SCALAR
 
-float getDistanceToTarget(int area)
+float getDistanceToTarget(int y, bool isHighFlag)
 {
-  return (SIZE_DISTANCE_SCALAR / area);
+  return (isHighFlag ? HIGH_FLAG_HEIGHT : MID_FLAG_HEIGHT) / tan((3.14159 / 180.0) * (212 - y) * (45.0/212.0));
 }
 
 bool spinFlywheelToDistance(float inches, bool isHighFlag)

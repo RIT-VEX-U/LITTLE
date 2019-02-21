@@ -31,8 +31,9 @@ void opcontrol()
       Hardware::intakeMotor.move_voltage(0);
     }
 
-    if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A))
-      autoAim(red);
+    fireBall(red, Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A), false, false);
+		
+
 
     /*
     if(Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_UP)){

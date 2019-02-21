@@ -10,6 +10,6 @@ bool fireBall(bool spinUpButton, bool fireButton, float distanceToFlag, float se
 bool setFlywheelSpeed(int rpm);
 bool intakeBall(int direction);
 bool autoAim(Color color);
-float getDistanceToTarget(int area);
+float getDistanceToTarget(int y, bool isHighFlag);
 bool spinFlywheelToDistance(float inches, bool isHighFlag);
 #endif
