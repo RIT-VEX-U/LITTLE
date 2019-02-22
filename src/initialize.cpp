@@ -1,7 +1,6 @@
 #include "main.h"
 #include "hardware.h"
 
-<<<<<<< HEAD
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
@@ -14,10 +13,6 @@ void on_center_button() {
 
 pros::vision_signature blue_signature = pros::Vision::signature_from_utility(1, -4143, -2977, -3560, 11037, 12053, 11546, 10, 0);//BLUE
 pros::vision_signature red_signature = pros::Vision::signature_from_utility(2, 5761, 6235, 5998, -625, 1, -312, 9.9, 0);//RED
-=======
-pros::vision_signature blue_signature = pros::Vision::signature_from_utility(1, -3817, -3307, -3562, 12179, 13435, 12807, 8.8, 0);//BLUE
-pros::vision_signature red_signature = pros::Vision::signature_from_utility(2, 8595, 8905, 8750, -717, -353, -535, 8.8, 0);//RED
->>>>>>> 5c7af6d767123247c7f3433c37b03f1109379369
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.

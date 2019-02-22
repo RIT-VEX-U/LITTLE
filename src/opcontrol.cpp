@@ -31,8 +31,9 @@ void opcontrol()
       Hardware::intakeMotor.move_voltage(0);
     }
 
-    fireBall(red, Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A), false, false);
-		
+		fireBall(red, Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_A),
+		 Hardware::controller1.get_digital(E_CONTROLLER_DIGITAL_B), false);
+
 
 
 

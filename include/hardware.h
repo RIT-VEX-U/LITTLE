@@ -18,6 +18,7 @@ public:
   static pros::Motor flipperMotor;
 
   static pros::ADIGyro gyro;
+  static pros::ADIUltrasonic ult1;
   static pros::Vision camera;
 
   static pros::Controller controller1;

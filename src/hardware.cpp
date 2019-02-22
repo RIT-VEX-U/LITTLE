@@ -18,5 +18,6 @@ PIDController Hardware::flywheelPID = PIDController(2,.1,.01,.02,{&Hardware::rig
 Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
 ADIGyro Hardware::gyro = ADIGyro(1, .1);
+ADIUltrasonic Hardware::ult1 = ADIUltrasonic(1,2);
 
 Vision Hardware::camera = Vision(5);
