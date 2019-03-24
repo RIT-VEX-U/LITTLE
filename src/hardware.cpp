@@ -1,6 +1,7 @@
 #include "api.h"
 #include "hardware.h"
 #include "PIDController.h"
+#include "okapi/api.hpp"
 
 using namespace pros;
 
@@ -17,7 +18,8 @@ PIDController Hardware::flywheelPID = PIDController(2,.1,.01,.02,{&Hardware::rig
 
 Controller Hardware::controller1 = Controller(E_CONTROLLER_MASTER);
 
-ADIGyro Hardware::gyro = ADIGyro(1, .1);
+okapi::ADIGyro Hardware::gyro = okapi::ADIGyro(3, .1);
+
 ADIUltrasonic Hardware::ult1 = ADIUltrasonic(1,2);
 
 Vision Hardware::camera = Vision(5);

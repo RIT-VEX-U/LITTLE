@@ -15,13 +15,14 @@ PIDController::PIDController(float p, float i, float d, float deltaTime, std::ve
   pidOut = 0;
   dError = 0;
   error = 0;
+  velocity = 0;
 
   task_handle = new pros::Task(task_function, (void*)this);
   task_handle->resume();
 }
 
 float PIDController::step(){
-  float velocity = victims[0]->get_actual_velocity() * 35;
+  velocity = victims[0]->get_actual_velocity() * 35;
   if(target == 0){
     return 0;
   }else{

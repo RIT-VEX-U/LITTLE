@@ -1,53 +1,22 @@
 #include "main.h"
 #include "hardware.h"
 #include "drive.h"
-#define SPROCKET_ROTATION 2.3561925 // circumference in inches, distance traveled in one rotation
+#include "initialize.h"
+#include "ballshooter.h"
 
-//values need to be changed
-//pros::vision_signature_s_t RED_SIG = pros::Vision::signature_from_utility(1, 8973, 11143, 10058, -2119, -1053, -1586, 5.4, 0);
-//vision_signature_s_t BLUE_SIG = Vision::signature_from_utility(2,...);
 
 enum AutoPath
 {
-  init, turnToOurFlag1, fireMid1, driveToPushFlag, reverseFromPushFlag,
-  turnToGetBall1, driveToBall1, reverseFromBall1, turnToMidFlag, fireMid2,
-  turnToGetBall2, driveToBall2, reverseFromBall2, turnToOurFlag2, fireHigh1, end
+  init, driveToFireDist1, fireBall1, backUpToInitialPos1, turnToGetBall,
+   driveToBall, pickupBall, backUpToInitialPos2, turnToFlag, driveToFireDist2,
+   fireBall2, end
 };
 
 
 AutoPath currentPosition = init;
 
-// set vision vision signatures
-void setSig(){
-  //Hardware::camera.set_signature(1, &RED_SIG);
-  //Hardware::vis.set_signature(1, &BLUE_SIG);
-}
-
-
-
-// resets chassis encoders (all?)
-void resetEncoders(){
-  Hardware::leftMotor.set_zero_position(Hardware::leftMotor.get_position());
-  Hardware::rightMotor.set_zero_position(Hardware::rightMotor.get_position());
-}
-
-// position robot so it's ready to shoot (vision sensor needed)
-void lineUp(){
-
-}
-
-//
-
-// Drive to distance given
-void driveDist(int inch){
-  while(Hardware::leftMotor.get_position()*SPROCKET_ROTATION < inch){
-    drive(100, 100); //lowered speed for more accuracy
-  }
-  drive(-20, -20); //quick brake if needed
-  pros::delay(500);
-  drive(0, 0);
-  resetEncoders();
-}
+int savedLeftEncoder = 0;
+int savedRightEncoder = 0;
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -61,55 +30,67 @@ void driveDist(int inch){
  * from where it left off.
  */
 void autonomous() {
+  while(true)
+  {
   switch(currentPosition)
   {
     case init:
-      setSig();
+      currentPosition = driveToFireDist1;
     break;
-    case turnToOurFlag1:
-
+    case driveToFireDist1:
+      if(driveInches(24.0, .5))
+      {
+        currentPosition = fireBall1;
+        resetEncoders();
+      }
     break;
-    case fireMid1:
-
+    case fireBall1:
+      if(fireBall(Initialize::flagColor, true, false, true))
+      {
+        pros::delay(5000);
+        Hardware::flywheelPID.setTarget(0);
+        Hardware::leftMotor.move_absolute(0, .4 * 127);
+        Hardware::rightMotor.move_absolute(0, .4 * 127);
+        pros::delay(1000);
+        currentPosition = backUpToInitialPos1;
+      }
     break;
-    case driveToPushFlag:
-
+    case backUpToInitialPos1:
+      if(driveInches(33, -.5))
+        currentPosition = turnToGetBall;
     break;
-    case reverseFromPushFlag:
-
+    case turnToGetBall:
+      if(turnDegrees((Initialize::currentColor == Hardware::Color::red ? 1 : -1) * 90, .5))
+        currentPosition = driveToBall;
     break;
-    case turnToGetBall1:
-
+    case driveToBall:
+      if(driveInches(24 + 3, .7))
+        currentPosition = backUpToInitialPos2;
+      Hardware::intakeMotor.move(-127);
     break;
-    case driveToBall1:
-
+    case backUpToInitialPos2:
+      if(driveInches(20, -.7))
+        currentPosition = turnToFlag;
+      Hardware::intakeMotor.move(0);
     break;
-    case reverseFromBall1:
-
+    case turnToFlag:
+      if(turnDegrees((Initialize::currentColor == Hardware::Color::red ? 1 : -1) * -90, .5))
+        currentPosition = driveToFireDist2;
     break;
-    case turnToMidFlag:
-
+    case driveToFireDist2:
+      if(driveInches(36, .7))
+        currentPosition = fireBall2;
     break;
-    case fireMid2:
-
-    break;
-    case turnToGetBall2:
-
-    break;
-    case driveToBall2:
-
-    break;
-    case reverseFromBall2:
-
-    break;
-    case turnToOurFlag2:
-
-    break;
-    case fireHigh1:
-
-    break;
+    case fireBall2:
+      if(fireBall(Initialize::flagColor, false, true, true))
+        {
+          pros::delay(5000);
+          Hardware::flywheelPID.setTarget(0);
+        }
     case end:
 
     break;
   }
+  pros::delay(20);
+}
 }

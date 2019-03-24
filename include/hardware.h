@@ -2,10 +2,17 @@
 #define HARDWARE
 #include "api.h"
 #include "PIDController.h"
+#include "okapi/api.hpp"
 
 class Hardware
 {
 public:
+
+  enum Color
+  {
+    red, blue
+  };
+
   static pros::Motor leftMotor;
   static pros::Motor rightMotor;
 
@@ -17,8 +24,8 @@ public:
 
   static pros::Motor flipperMotor;
 
-  static pros::ADIGyro gyro;
   static pros::ADIUltrasonic ult1;
+  static okapi::ADIGyro gyro;
   static pros::Vision camera;
 
   static pros::Controller controller1;

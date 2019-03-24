@@ -5,14 +5,14 @@
 #include "main.h"
 #include "pros/vision.h"
 
-#define AUTO_AIM_SPEED .5
+#define AUTO_AIM_SPEED .4
 #define FLYWHEEL_ANGLE 60.0
 #define FLYWHEEL_DIAMETER 4.0
 #define LOW_FLAG_HEIGHT (18.3/12.0
 #define MID_FLAG_HEIGHT (32.4/12.0)
 #define HIGH_FLAG_HEIGHT (46.3/12.0)
 #define FLYWHEEL_HEIGHT_FROM_GROUND (4.0/12.0)
-#define AUTOAIM_DISTANCE_DEADBAND (.5/12.0)//feet
+#define AUTOAIM_DISTANCE_DEADBAND (2/12.0)//feet
 
 #define HIGH_FLAG_CUTOFF
 
@@ -39,7 +39,7 @@ using namespace pros;
 
   Returns true if we have shot a ball, or are in the process of firing a ball.
 */
-bool fireBall(Color color, bool highShot, bool midShot, bool isInAuto)
+bool fireBall(Hardware::Color color, bool highShot, bool midShot, bool isInAuto)
 {
   if(!highShot && !midShot)
     return false;
@@ -50,7 +50,7 @@ bool fireBall(Color color, bool highShot, bool midShot, bool isInAuto)
       if(setFlywheelSpeed(7000))
       {
         if(isInAuto)
-          Hardware::intakeMotor.move_relative(1000, -127);
+          Hardware::intakeMotor.move_relative(-900*10, 127);
         else
           Hardware::intakeMotor.move(-127);
         return true;
@@ -68,7 +68,7 @@ bool setFlywheelSpeed(int rpm)
 {
   Hardware::flywheelPID.setTarget(rpm);
 
-  if(abs(Hardware::flywheelPID.error) < FLYWHEEL_INRANGE_RPM)
+  if(abs(Hardware::flywheelPID.velocity) > (rpm - FLYWHEEL_INRANGE_RPM))
     return true;
 
   return false;
@@ -90,22 +90,22 @@ void spinUpFlywheel(int voltage){
   This is done by comparing X value of the largest blob of that color to the
   center of the camera, and controlling whether the robot turns left or right.
 */
-bool autoAim(Color color)
+bool autoAim(Hardware::Color color)
 {
   pros::vision_object out;
-  if(color == blue)
+  if(color == Hardware::Color::blue)
   {
   out = Hardware::camera.get_by_sig(0, 1);
-  }else if(color == red)
+}else if(color == Hardware::Color::red)
   {
   out = Hardware::camera.get_by_sig(0, 2);
   }
 
   //lcd::print(0, "x out: %i", out.x_middle_coord);
 
-  if(out.x_middle_coord > 170)
+  if(out.x_middle_coord > 158+10)
     drive(AUTO_AIM_SPEED * 127, -AUTO_AIM_SPEED * 127);
-  else if(out.x_middle_coord < 146)
+  else if(out.x_middle_coord < 158-10)
     drive(-AUTO_AIM_SPEED * 127, AUTO_AIM_SPEED * 127);
   else
   {
@@ -116,12 +116,21 @@ bool autoAim(Color color)
  return false;
 }
 
+/**
+  Automatically sets the robot distance away from the wall behind the flag,
+  and uses the ultrasonic sensor to drive to it.
+
+  Originally this method used the camera to detect the height of the flag and
+  use trig to calculate the distance away from it. It worked, but only if one
+  flag was present at a time, because figuring out which flag is which without
+  context is difficult.
+*/
 bool autoAimDistance(float ultVal, bool isHighFlag)
 {
   //float targetDist = ((isHighFlag ? HIGH_FLAG_HEIGHT : MID_FLAG_HEIGHT) / tan((3.14159 / 180.0) * FLYWHEEL_ANGLE))+1;
   float targetDist = (isHighFlag ? 3 : 1.5);
   float currentDist = ultVal / (2.54*12*10);
-  lcd::print(0, "target: %f, current: %f", targetDist, currentDist);
+  //lcd::print(0, "target: %f, current: %f", targetDist, currentDist);
   if(fabs(currentDist - targetDist) < AUTOAIM_DISTANCE_DEADBAND)
   {
     drive(0,0);

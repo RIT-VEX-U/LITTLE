@@ -1,8 +1,9 @@
 #include "hardware.h"
 #include "drive.h"
 
-bool turnInit = true;
-
+/**
+	An easier wrapper for direct control tank drive.
+*/
 void drive(int leftMotor, int rightMotor)
 {
 	Hardware::leftMotor.move(leftMotor);
@@ -34,40 +35,7 @@ if(square_inputs)
 drive((int)(left_out * 127), (int)(right_out * 127));
 }
 
-//turn to specified degrees at specified speed, has to be in while loop when used
-bool turn(float degrees, float speed)
-{
-  if(turnInit)
-	{
-		Hardware::gyro.reset();
-		turnInit = false;
-	}
 
-	if(fabs(Hardware::gyro.get_value()) > fabs(degrees))
-	{
-		drive(0,0);
-		turnInit = true;
-		return true;
-	}
-
-	speed = fabs(127 * speed);
-	if(degrees > 0)
-		drive(speed, -speed);
-	else if(degrees < 0)
-		drive(-speed, speed);
-
-	return false;
-}
-
-//turn to unspecified degrees at specified speed, has to be in while loop when used
-void turnNoDeg(bool right, float speed){
-	if(right){
-		drive(speed, -speed);
-	}
-	else{
-		drive(-speed, speed);
-	}
-}
 
 /**
 * Drives the robot with a mecanum drivesystem, and with joystick inputs, between
@@ -119,5 +87,82 @@ void driveMecanumRaw(float magnitude, float direction, float rotation, bool squa
 
 		Hardware::leftMotor.move(frontLeftOut * 127);
 		Hardware::rightMotor.move(frontRightOut * 127);
+	}
 
-}
+	void resetEncoders()
+	{
+		Hardware::leftMotor.tare_position();
+		Hardware::rightMotor.tare_position();
+	}
+
+/**
+		Gets the average encoder value of all drive encoders. It also takes the
+		absolute value before doing so to make sure positives and negatives
+		don't cancel out when turning.
+*/
+	float getAbsValAvgEncVal()
+	{
+		return ((abs(Hardware::leftMotor.get_position())
+		 + abs(Hardware::rightMotor.get_position())) / 2.0)
+		 * ((3.14159 * 2.43) / 900.0);
+	}
+
+	bool driveInchesInit = true;
+	/**
+		Drives the robot X inches either forwards or backwards. It calculates how
+		many inches the robot has driven given the average encoder inputs from the
+		motors. Speed is in percent, -1.0 to 1.0.
+
+		This also has dynamic stabilty by comparing the left side encoder to the
+		right, and compensating for the difference betweeen the two.
+	*/
+	bool driveInches(float inches, float speed)
+	{
+		if(driveInchesInit)
+			{
+				resetEncoders();
+				Hardware::gyro.reset();
+				driveInchesInit = false;
+			}
+		if(getAbsValAvgEncVal() >= abs(inches))
+			{
+				drive(0,0);
+				driveInchesInit = true;
+				return true;
+			}
+
+		if(Hardware::gyro.get() > 0)
+			drive((speed - .08)* 127, (speed +.08) * 127);
+		else if(Hardware::gyro.get() < 0)
+			drive((speed + .08)* 127, (speed - .08) * 127);
+		else
+			drive(speed * 127, speed * 127);
+
+		return false;
+	}
+
+	bool turnDegreesInit = true;
+	/**
+		Turns the robot X degrees by using the robot turning circle to calculate the
+		number of "inches" the robot should turn before it has reached x degrees.
+
+		This uses the arc length formula, and encoders as the sensor.
+	*/
+	bool turnDegrees(int degrees, float speed)
+	{
+		if(turnDegreesInit)
+		{
+			Hardware::gyro.reset();
+			turnDegreesInit = false;
+		}
+
+		if(fabs(Hardware::gyro.get()) >= abs(degrees))
+		{
+			drive(0,0);
+			turnDegreesInit = true;
+			return true;
+		}
+
+		drive(speed * (degrees > 0 ? 1 : -1) * 127, speed * (degrees > 0 ? -1 : 1) * 127);
+		return false;
+	}

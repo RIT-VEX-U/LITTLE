@@ -1,5 +1,6 @@
 #include "main.h"
 #include "hardware.h"
+#include "initialize.h"
 
 void on_center_button() {
 	static bool pressed = false;
@@ -13,6 +14,9 @@ void on_center_button() {
 
 pros::vision_signature blue_signature = pros::Vision::signature_from_utility(1, -4143, -2977, -3560, 11037, 12053, 11546, 10, 0);//BLUE
 pros::vision_signature red_signature = pros::Vision::signature_from_utility(2, 5761, 6235, 5998, -625, 1, -312, 9.9, 0);//RED
+
+Hardware::Color Initialize::currentColor = Hardware::Color::red;
+Hardware::Color Initialize::flagColor = (Initialize::currentColor == Hardware::Color::red) ? Hardware::Color::blue : Hardware::Color::red;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
